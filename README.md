@@ -135,5 +135,12 @@ Here you define what networks you want to create. Bear in mind, that the default
 ### Servers
 Servers block is self explanatory. Make sure to correctly refer to the network names and indexes of the network interfaces. The rest of the information can be grepped from the Web UI.
 
+Now if you want to see some real use case where `nuxctl` is at its best - consider [the following Lab definition](https://pastebin.com/BgDrY7N2) I use lately. Its literally impossible to recreate that many components via Web UI.
+
+## Disclaimer
+`nuxctl` is young and fast-coded, that is why its been marked with &alpha; (alpha). This means that the functionality is limited, bugs might appear in unexpected places and code is not hardened.
+
+But this is alright, its just a start and I want to kindly ask you to report any bugs seen directly to me - roman.dodin@nokia.com. You can also use this email to suggest improvements and additional features.
+
 ## Author
 Roman Dodin - roman.dodin@nokia.com
