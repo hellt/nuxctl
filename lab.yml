@@ -1,0 +1,50 @@
+---
+name: nuxctl-example
+reason: "Nux'em all"
+expires: "2018-08-28T17:13:11.278Z"
+template: 5980ee745a38da00012d158d
+
+sshKeys:
+  - name: cats
+    key: "ssh-rsa AAAAB3Nza[OMITTED FOR BREVITY]gzfTp"
+
+####################################
+######    S E R V I C E S
+####################################
+services:
+  - name: vsd
+    type: public
+    port: 8443
+    urlScheme: https
+    protocols:
+      - tcp
+    destination:
+      port: 8443
+      address: "10.0.0.2"
+
+####################################
+######    N E T W O R K S
+####################################
+networks:
+  - name: nsg1-lan1
+    cidr: "172.17.1.0/24"
+    dns: "10.0.0.1"
+    dhcp: false
+
+####################################
+######    S E R V E R S
+####################################
+servers:
+  - name: nsg1
+    flavor: "m1.small"
+    image: "nux_nsg_5.2.3"
+    interfaces:
+      - network: private
+        address: "10.0.0.11"
+        index: 0
+      - network: wan-dummy
+        address: "255.255.255.1"
+        index: 1
+      - network: nsg1-lan1
+        address: "172.17.1.1"
+        index: 2
