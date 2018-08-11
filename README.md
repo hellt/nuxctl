@@ -47,6 +47,14 @@ The basic usage example is as follows:
 # -u <credentials_file_path>
 # -l <lab_file_path>
 nuxctl -u my_credentials.yml -l vns_lab.yml
+
+# output
+Loading user credentials from 'user_creds.yml' file
+Logging 'hellt' user in...
+User 'hellt' logged in...
+Loading lab configuration from 'lab.yml' file
+Sending request to create a lab...
+Lab has been successfully queued for creation!
 ```
 
 Here the two files are used by `nuxctl`, one reads credentials from a file, the other expects to find a lab definition file.
