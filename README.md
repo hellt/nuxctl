@@ -1,9 +1,9 @@
-# `nuxctl`<sup>&alpha;</sup> - NuageX CLI control
+# <code>nuxctl<sup>&alpha;</sup></code> - NuageX CLI control
 [NuageX](https://nuagex.io) has been built to let our customers and partners taste the best in class SDN solution by offering pre-defined, tested, and simple templates.
 
 But NuageX can be (and already is) of a great help to all of us, the engineers. Currently the NuageX team is working hard to see what features can be unleashed and what additional tools we have to build to let our internal users satisfy their needs and boost the overall performance.
 
-One of the tools that should radically simplify NuageX usage in complex labs is `nuxctl`<sup>&alpha;</sup> - the CLI client to the NuageX API that allows end-users to define Labs as-a-code and launch them with a single click.
+One of the tools that should radically simplify NuageX usage in complex labs is <code>nuxctl<sup>&alpha;</sup></code> - the CLI client to the NuageX API that allows end-users to define Labs as-a-code and launch them with a single click.
 
 ## Why `nuxctl`?
 ### Speed up the deployment time
