@@ -134,6 +134,8 @@ Lets go over some notable blocks here. In the very beginning you need to supply 
 * `template`: ID of the _base template_. You can get this ID by checking the JSON response via the Developers Console. For instance, [this is the list](https://pastebin.com/5ZpKQcfZ) of ID-Name pairs for the templates available by the date of 2018-08-11.
 * `sshKeys`: put a name and the public key that you want to use with this lab. Multiple keys can be provided.
 
+> **IMPORTANT:** the public key should have been added to your NuageX profile before you use it in the lab definition file `nuxctl`. If you see that your lab is queued for creation by `nuxctl`, but nothing is seen in the web ui, then first check your key, make sure that it is pasted in full.
+
 ### Services
 In the Services block you can define the port-forwarding rules that will be configured within your lab.
 
