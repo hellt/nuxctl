@@ -140,7 +140,7 @@ Lets go over some notable blocks here. In the very beginning you need to supply 
 In the Services block you can define the port-forwarding rules that will be configured within your lab.
 
 ### Networks
-Here you define what networks you want to create. Bear in mind, that the default `private: 10.0.0.0/24` network is always created in the background.
+Here you define what networks you want to create. Bear in mind, that the default `private: 10.0.0.0/24` network is always created in the background. **DO NOT DEFINE** private network in your YAML file, it will be created automatically for every lab.
 
 ### Servers
 Servers block is self explanatory. Make sure to correctly refer to the network names and indexes of the network interfaces. The rest of the information can be grepped from the Web UI.
