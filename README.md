@@ -8,7 +8,7 @@ One of the tools that should radically simplify NuageX usage is <code>nuxctl<sup
 * Define Labs configuration as-a-code and deploy them with a single click.
 * Dump existing NuageX Lab into the configuration file that can be used by `nuxctl` to instantaneous recreation of that lab.
 
-## Why `nuxctl`?
+## Why nuxctl?
 ### Speed up the lab configuration & deployment time
 The NuageX Web UI allows users to launch the existing templates and augment them by adding new servers, networks, services. If we are talking about deploying a lab from an existing template, then Web UI is a perfect choice to move forward. But things get a bit slow when a user wants to add multiple components to the base template.
 
@@ -149,7 +149,7 @@ This block holds Networks definitions that will be created for your Lab. Bear in
 #### Servers
 Servers block contains configuration for the VMs you want to add. Make sure to correctly refer to the network names, IP addresses and indexes of the network interfaces. The rest can be retrieved from the Web UI.
 
-### `create-lab`
+### create-lab
 To create (aka deploy) a NuageX Lab from the Lab definition file use the `create-lab` command:
 ```
 Usage:
@@ -172,7 +172,7 @@ Sending request to create a lab...
 Lab has been successfully queued for creation!
 ```
 
-### `dump-lab`
+### dump-lab
 In case a user wants to save a running NuageX Lab (that has been created via Web UI) in a configuration file the `dump-lab` command can be used:
 
 ```
@@ -204,7 +204,7 @@ Lab configuration has been successfully written to 'dump-example.yml' file!
 
 Note, that the lab configuration retrieved with the `dump-lab` command will have the _private_ network commented out. This is done on purpose, to let you reuse the dumped configuration without manually commenting out this block.
 
-### `list-templates`
+### list-templates
 NuageX provides a long list of Lab Templates ranging from simple Nuage VNS/VCS installations to the complex partner integrations. Every NuageX Lab should be based on some Template.
 
 `nuxctl` expects to see a `Template ID` in the Lab definition file to understand which template to use. At the moment of this writing, Templates listed by this URL https://experience.nuagenetworks.net/app/templates do not expose the Template ID, therefore a separate command has been added to help with extracting the Template ID by the Template name.
