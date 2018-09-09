@@ -1,0 +1,34 @@
+package cmd
+
+import (
+	"fmt"
+	"nuxctl/nuagex"
+	"os"
+
+	"github.com/spf13/cobra"
+)
+
+// VERSION is set in main.go and tells the nuxctl version
+var VERSION string
+
+var user nuagex.User
+
+var lab nuagex.Lab
+
+var rootCmd = &cobra.Command{
+	Use:   "nuxctl",
+	Short: "nuxctl is a CLI client for NuageX lab deployment",
+	Long:  `nuxctl is a command line client to deploy labs which configuration is expressed in YAML files on the NuageX platform.`,
+	// Run: func(cmd *cobra.Command, args []string) {
+	// 	// Do Stuff Here
+	// },
+}
+
+// Execute launches the root command
+func Execute(ver string) {
+	VERSION = ver
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}

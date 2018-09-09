@@ -1,7 +1,9 @@
 ---
 name: nuxctl-example
 reason: "Nux'em all"
-expires: "2018-08-28T17:13:11.278Z"
+### PAY ATTENTION TO THE EXPIRATION DATE. IT CANT BE IN THE PAST
+### AND IT CANT BE MORE THAN ONE MONTH FROM THE DEPLOYMENT DATE
+expires: "2018-09-28T17:13:11.278Z"
 template: 5980ee745a38da00012d158d
 
 sshKeys:

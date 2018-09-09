@@ -1,20 +1,23 @@
-# <code>nuxctl<sup>&alpha;</sup></code> - NuageX CLI control
-[NuageX](https://nuagex.io) has been built to let our customers and partners taste the best in class SDN solution by offering pre-defined, tested, and simple templates.
+# <code>nuxctl<sup>&beta;</sup></code> - NuageX CLI control
+[NuageX](https://nuagex.io) has been built to let new customers, partners and everyone else play with the best in class SDN solution by offering on-demand pre-defined, tested, and simple Nuage VSP environment.
 
-But NuageX can be (and already is) of a great help to all of us, the engineers. Currently the NuageX team is working hard to see what features can be unleashed and what additional tools we have to build to let our internal users satisfy their needs and boost the overall performance.
+But NuageX can be of a great help to the experienced Nuage Networks users as well! Advanced templates that are exposed to the verified partners and existing customers makes it possible to create complex labs for feature-testing, technical trainings, solution validation and more...
 
-One of the tools that should radically simplify NuageX usage in complex labs is <code>nuxctl<sup>&alpha;</sup></code> - the CLI client to the NuageX API that allows end-users to define Labs as-a-code and launch them with a single click.
+One of the tools that should radically simplify NuageX usage is <code>nuxctl<sup>&beta;</sup></code> - the CLI client to the NuageX API that offers the following major features:
+
+* Define Labs configuration as-a-code and deploy them with a single click.
+* Dump existing NuageX Lab into the configuration file that can be used by `nuxctl` to instantaneous recreation of that lab.
 
 ## Why `nuxctl`?
-### Speed up the deployment time
-The NuageX Web UI allows users to launch the existing templates and augment them by adding new servers, networks, services. If we are talking about deploying a lab from an existing template, then Web UI is a perfect choice to move forward. But things get a bit slowly when a user wants to add multiple components to a _base template_.
+### Speed up the lab configuration & deployment time
+The NuageX Web UI allows users to launch the existing templates and augment them by adding new servers, networks, services. If we are talking about deploying a lab from an existing template, then Web UI is a perfect choice to move forward. But things get a bit slow when a user wants to add multiple components to the base template.
 
-Since for every, say, _server_ you need to type in the flavor, name, select the interfaces and their IP addresses, the process becomes quite routine if you need to repeat it more than once.
+Since for every, say, _server_ you need to type in the _flavor_, _name_, select the _interfaces_ and their _IP addresses_, the process quickly becomes monotonous.
 
 With `nuxctl` the lab definition is a YAML file, so it can be written once, read many, effectively eliminating the need to type in things that are not changed.
 
 ### Lab definition as a code
-By defining a Lab in a YAML structured file we are moving the NuageX labs into the buzzy area of `X-as-a-code`. Effectively, your Lab is now a piece of code, and here are the benefits of it:
+By defining a Lab in a YAML structured file the Lab configuration becomes a piece of code, and here are the benefits of it:
 
 * version controlled
 * highly customizable and editable with a text editor of your choice
@@ -22,69 +25,67 @@ By defining a Lab in a YAML structured file we are moving the NuageX labs into t
 * automation ready
 
 ### Redeploy instantly, anytime!
-Its impossible to get a prolongation for a NuageX Lab. _Sad, but true_.
+Its impossible to get a prolongation for a NuageX Lab. This is a necessity. And its not a deal breaker anymore! 
 
-But imagine that your Lab structure defined in a file and launched by `nuxctl`, while your overlay configuration is defined in another file and handled by [CATS](http://cats-docs.nuageteam.net). You see where are we going?.. You no longer need to request to prolong a Lab, its easily **redeployable**.
+Remember, your Lab configuration is now stored in a human-readable file and can be re-instantiated anytime by `nuxctl`, while your overlay configuration can be defined and launched by various automation tools Nuage has to offer ([vspk-ansible](https://github.com/nuagenetworks/vspk-ansible), [vspk-python](https://github.com/nuagenetworks/vspk-python), [CATS](http://cats-docs.nuageteam.net) to name a few).
 
-## Usage
-Finally, how to use the alpha version of `nuxctl`?
+You no longer need to request a Lab prolongation, it is easily **redeployable**.
 
-The CLI utility is distributed as a single binary for the following platforms:
+## Download
+The CLI utility is distributed in a binary format (arch: amd64) for the following platforms:
 
-* linux
-* os x
-* windows
+* [linux](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/linux/nuxctl)
+* [os x](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/darwin/nuxctl)
+* [windows](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/windows/nuxctl.exe)
 
-You can download the binaries [here](https://nokia-my.sharepoint.com/:f:/p/roman_dodin/ErXXISWPmkpAo3Er3Qls5ksBie4OosAyP45Dt6GCVOv44g?e=BQyY1i).
-
-The utility supports the following operation:
-* login a user
-* create a lab out of a definition file for a logged in user
-
-The basic usage example is as follows:
-
+You can download the utility and make it ready to use in one line:
 ```bash
-# -u <credentials_file_path>
-# -l <lab_file_path>
-nuxctl -u my_credentials.yml -l vns_lab.yml
-
-# output
-Loading user credentials from 'user_creds.yml' file
-Logging 'hellt' user in...
-User 'hellt' logged in...
-Loading lab configuration from 'lab.yml' file
-Sending request to create a lab...
-Lab has been successfully queued for creation!
+cd /tmp && curl -O https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/darwin/nuxctl && chmod a+x nuxctl
 ```
 
-Here the two files are used by `nuxctl`, one reads credentials from a file, the other expects to find a lab definition file.
+## Usage
+`nuxctl` supports the following commands:
+* **create-lab** - Create NuageX lab (environment) out of the lab configuration YAML file.
+* **dump-lab** - Dump existing NuageX lab (environment) configuration in a YAML file.
+* **list-templates** - Display NuageX Lab templates.
+* **version** - Print the version number of nuxctl
 
-If `nuxctl` is executed without the `-u` and `-l` flags supplied, then the defaults files path will be assumed:
+Prior to jumping into each commands syntax and usage examples its important to mention that only an authenticated user can interact with NuageX API. This means that each command requires a proper authentication to happen.
 
-* default path for user credentials file: `./user_creds.yml`
-* default path for lab file: `./lab.yml`
+### Authentication
+`nuxctl` commands expect to find NuageX users credentials stored in a YAML file aka _credentials file_:
 
-## Credentials file
-Credentials file accepts username and password in the plain text format:
-```yml
+```yaml
 ---
+# example credentials file user_creds.yml
 username: "nuagex"
 password: "passw0rd"
 ```
 
-## Lab definition file
-Lab definition file is a bit more complex, since it deals with the feature-rich NuageX API.
-Here is a simple Lab, expressed in YAML that is understandable to engineers and `nuxctl`:
+A user should create such a file with theirs credentials and supply it to the appropriate commands using the `-c` flag. If the file is called `user_creds.yml` then the `-c` flag can be omitted, since `nuxctl` will assume this name by default.
+
+```bash
+# credentials file is passed explicitly
+nuxctl create-lab -c my_creds.yml -l mylab.yml
+
+# credentials file is omitted, assumed that user_creds.yml file is located in the same dir as nuxctl
+nuxctl create-lab -l mylab.yml
+```
+
+### Lab definition file
+Another key concept used in various `nuxctl` commands is the _Lab definition/configuration file_. This file declares the NuageX Lab configuration expressed in YAML markup and is the source of information for the `create-lab` command.
+
+Take a look at the following example:
 
 ```yml
 name: nuxctl-example
 reason: "Nux'em all"
 expires: "2018-08-28T17:13:11.278Z"
-template: 5980ee745a38da00012d158d
+template: "5980ee745a38da00012d158d"
 
 sshKeys:
   - name: cats
-    key: "ssh-rsa AAAAB3Nza[OMITTED FOR BREVITY]gzfTp"
+    key: "ssh-rsa AAAAB3Nza [OMITTED FOR BREVITY] gzfTp"
 
 ####################################
 ######    S E R V I C E S
@@ -108,6 +109,9 @@ networks:
     cidr: "172.17.1.0/24"
     dns: "10.0.0.1"
     dhcp: false
+  - name: wan-dummy
+    cidr: "10.10.10.0/24"
+    dhcp: false
 
 ####################################
 ######    S E R V E R S
@@ -121,36 +125,121 @@ servers:
         address: "10.0.0.11"
         index: 0
       - network: wan-dummy
-        address: "255.255.255.1"
+        address: "10.10.10.2"
         index: 1
       - network: nsg1-lan1
-        address: "172.17.1.1"
+        address: "172.17.1.2"
         index: 2
 ```
 
-Lets go over some notable blocks here. In the very beginning you need to supply the basic Lab information. Important fields there are:
+Lets go over some notable blocks here:
 
 * `expires`: expiration date, must be no longer than 30 days since the date of the deployment.
-* `template`: ID of the _base template_. You can get this ID by checking the JSON response via the Developers Console. For instance, [this is the list](https://pastebin.com/5ZpKQcfZ) of ID-Name pairs for the templates available by the date of 2018-08-11.
+* `template`: ID of the _base template_. You can get the list of available templates and theirs ID by using `nuxctl list-templates` command.
 * `sshKeys`: put a name and the public key that you want to use with this lab. Multiple keys can be provided.
 
-> **IMPORTANT:** the public key should have been added to your NuageX profile before you use it in the lab definition file `nuxctl`. If you see that your lab is queued for creation by `nuxctl`, but nothing is seen in the web ui, then first check your key, make sure that it is pasted in full.
+> **IMPORTANT:** the public key should have been added to your NuageX profile before you use it in the lab definition file `nuxctl`. If you see that your lab is queued for creation by `nuxctl`, but nothing is seen in the web ui, then first check your key, make sure that it is pasted without errors or truncation.
 
-### Services
-In the Services block you can define the port-forwarding rules that will be configured within your lab.
+#### Services
+In the Services block the port-forwarding rules are defined. These rules are configured in the jumpbox vm of your Lab.
 
-### Networks
-Here you define what networks you want to create. Bear in mind, that the default `private: 10.0.0.0/24` network is always created in the background. **DO NOT DEFINE** private network in your YAML file, it will be created automatically for every lab.
+#### Networks
+This block holds Networks definitions that will be created for your Lab. Bear in mind, that the default `private: 10.0.0.0/24` network is always created in the background. **DO NOT INCLUDE** the default private network in your YAML file since it will cause the deployment to fail.
 
-### Servers
-Servers block is self explanatory. Make sure to correctly refer to the network names and indexes of the network interfaces. The rest of the information can be grepped from the Web UI.
+#### Servers
+Servers block contains configuration for the VMs you want to add. Make sure to correctly refer to the network names, IP addresses and indexes of the network interfaces. The rest can be retrieved from the Web UI.
 
-Now if you want to see some real use case where `nuxctl` is at its best - consider [the following Lab definition](https://pastebin.com/BgDrY7N2) I use lately. Its literally impossible to recreate that many components via Web UI.
+### `create-lab`
+To create (aka deploy) a NuageX Lab from the Lab definition file use the `create-lab` command:
+```
+Usage:
+  nuxctl create-lab [flags]
 
-## Disclaimer
-`nuxctl` is young and fast-coded, that is why its been marked with &alpha; (alpha). This means that the functionality is limited, bugs might appear in unexpected places and code is not hardened.
+Flags:
+  -c, --credentials          Path to the user credentials file (default "user_creds.yml")
+  -l, --lab-configuration    Path to the Lab configuration file (default "lab.yml")
+```
 
-But this is alright, its just a start and I want to kindly ask you to report any bugs seen directly to me - roman.dodin@nokia.com. You can also use this email to suggest improvements and additional features.
+Note the default names used for credentials and lab-configuration file names. A successful execution of a `create-lab` command looks as follows. Credentials file and lab configuration file are passed explicitly, if they would have been omitted, default names would have been assumed by nuxctl.
+
+```
+bash-3.2$ ./nuxctl create-lab -c demo_user_creds.yml -l demo_lab.yml 
+Loading user credentials from 'demo_user_creds.yml' file
+Logging 'hellt' user in...
+User 'hellt' logged in...
+Loading lab configuration from 'demo_lab.yml' file
+Sending request to create a lab...
+Lab has been successfully queued for creation!
+```
+
+### `dump-lab`
+In case a user wants to save a running NuageX Lab (that has been created via Web UI) in a configuration file the `dump-lab` command can be used:
+
+```
+Usage:
+  nuxctl dump-lab [flags]
+
+Flags:
+  -c, --credentials    Path to the user credentials file. (default "user_creds.yml")
+  -f, --file           Path to the local YAML file that will receive lab configuration. (default "dumplab.yml")
+  -i, --lab-id         Lab ID. Seen as the variable portion in the lab hostname.
+```
+
+Again, credentials should be supplied along with the file name to save the Lab configuration. The Lab itself is referenced by its ID, which can be seen in the hostname portion of a lab:
+
+> ![pic a](https://gitlab.com/rdodin/pics/wikis/uploads/24527d2b40858051d82ebf1edc1d2e67/image.png)
+
+For reference' sake lets dump the lab created previously in a file named `dump-example.yml`:
+
+```
+$ ./nuxctl dump-lab -c demo_user_creds.yml -i 5b95785ee8b2619d3bc92d5a -f dump-example.yml
+Loading user credentials from 'demo_user_creds.yml' file
+Logging 'hellt' user in...
+User 'hellt' logged in...
+Retrieving NuageX Lab configuration...
+Parsing Lab configuration...
+Writing Lab configuration to 'dump-example.yml' file...
+Lab configuration has been successfully written to 'dump-example.yml' file!
+```
+
+Note, that the lab configuration retrieved with the `dump-lab` command will have the _private_ network commented out. This is done on purpose, to let you reuse the dumped configuration without manually commenting out this block.
+
+### `list-templates`
+NuageX provides a long list of Lab Templates ranging from simple Nuage VNS/VCS installations to the complex partner integrations. Every NuageX Lab should be based on some Template.
+
+`nuxctl` expects to see a `Template ID` in the Lab definition file to understand which template to use. At the moment of this writing, Templates listed by this URL https://experience.nuagenetworks.net/app/templates do not expose the Template ID, therefore a separate command has been added to help with extracting the Template ID by the Template name.
+
+```
+Usage:
+  nuxctl list-templates [flags]
+
+Flags:
+  -c, --credentials   Path to the user credentials file. (default "user_creds.yml")
+```
+
+And its easy to get the sorted by a name list of Templates:
+```
+$ ./nuxctl list-templates -c demo_user_creds.yml 
+Loading user credentials from 'demo_user_creds.yml' file
+Logging 'hellt' user in...
+User 'hellt' logged in...
+Retrieving NuageX Lab Templates...
+
+ID                        Name
+------------------------  ------------------------
+5980ee745a38da00012d158d  Empty template "For Customization"
+5a5e8fa6ff408b00010a3f7b  Nuage Networks 3.2R6 - Liberty Fusion Layer Infinity
+5a5e9159ff408b00010a3f98  Nuage Networks 4.0R3 - Generic Hardware VTEP Demo
+OMITTED FOR BREVITY
+```
+
+## Changelog
+### 0.1.0
+* added CLI framework to support multiple commands
+* added `create-lab`, `dump-lab`, `list-templates`, `version` commands
+
+### 0.0.1
+Initial version.
 
 ## Author
 Roman Dodin - roman.dodin@nokia.com
