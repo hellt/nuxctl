@@ -1,4 +1,4 @@
-version=0.0.1
+version=$1
 target_arch=amd64
 
 mkdir -p build/${version}
