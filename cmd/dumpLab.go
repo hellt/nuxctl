@@ -48,6 +48,11 @@ func dumpLab(cmd *cobra.Command, args []string) {
 		log.Fatalf("%v", err)
 	}
 	fmt.Println("Parsing Lab configuration...")
+
+	// change the template ID from the actual template id to the empty template
+	// discussed in https://gitlab.com/partner-program/nuagex/nuxctl/issues/3
+	l.Template = emptyTemplateID
+
 	ly, err := yaml.Marshal(&l)
 	if err != nil {
 		log.Fatalf("%v", err)
