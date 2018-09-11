@@ -11,6 +11,8 @@ import (
 // VERSION is set in main.go and tells the nuxctl version
 var VERSION string
 
+var emptyTemplateID = "5980ee745a38da00012d158d"
+
 var user nuagex.User
 
 var lab nuagex.Lab
