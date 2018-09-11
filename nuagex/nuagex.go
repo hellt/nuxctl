@@ -2,6 +2,7 @@ package nuagex
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -36,7 +37,11 @@ func SendHTTPRequest(method, url, token string, body []byte) ([]byte, int, error
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
 
-	client := &http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+
 	response, err := client.Do(req)
 	if err != nil || response.StatusCode == 404 {
 		return nil, 404, errors.New("Resource not found")

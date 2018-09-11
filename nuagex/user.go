@@ -2,6 +2,7 @@ package nuagex
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -19,19 +20,31 @@ type User struct {
 	Token    string
 }
 
-// LoadCredentials : load user credentials from YAML file
+// LoadCredentials : load user credentials from YAML file or env variables
 func (u *User) LoadCredentials(fn string) *User {
-	fmt.Printf("Loading user credentials from '%s' file\n", fn)
-	yamlFile, err := ioutil.ReadFile(fn)
-	if err != nil {
-		log.Printf("LoadCredentials error   #%v ", err)
-		os.Exit(1)
-	}
-	err = yaml.Unmarshal(yamlFile, u)
-	if err != nil {
-		log.Fatalf("Unmarshal: %v", err)
+	// if credentials file exists
+	if _, err := os.Stat(fn); err == nil {
+		fmt.Printf("Loading user credentials from '%s' file...\n", fn)
+		yamlFile, err := ioutil.ReadFile(fn)
+		if err != nil {
+			log.Printf("LoadCredentials error   #%v ", err)
+			os.Exit(1)
+		}
+		err = yaml.Unmarshal(yamlFile, u)
+		if err != nil {
+			log.Fatalf("Unmarshal: %v", err)
+		}
+
 	}
 
+	if _, err := os.Stat(fn); os.IsNotExist(err) {
+		fmt.Println("Looking for user credentials in the environment variables 'NUX_USERNAME', 'NUX_PASSWORD'...")
+		fmt.Printf("%s, %s\n", os.Getenv("NUX_USERNAME"), os.Getenv("NUX_PASSWORD"))
+		if os.Getenv("NUX_USERNAME") == "" || os.Getenv("NUX_PASSWORD") == "" {
+			log.Fatalf("Failed to find credentials file by the default path '%s' and in the environment variables 'NUX_USERNAME', 'NUX_PASSWORD'", fn)
+		}
+		u.Username, u.Password = os.Getenv("NUX_USERNAME"), os.Getenv("NUX_PASSWORD")
+	}
 	return u
 }
 
@@ -49,7 +62,12 @@ func (u *User) Login() (*User, error) {
 	URL := buildURL("/auth/login")
 	req, _ := http.NewRequest("POST", URL, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+
 	response, _ := client.Do(req)
 
 	if response.StatusCode != 200 {
