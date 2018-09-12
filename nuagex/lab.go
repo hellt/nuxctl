@@ -89,11 +89,11 @@ func CreateLab(u *User, reqb []byte) (LabResponse, error) {
 // DumpLab retrives Lab JSON object
 func DumpLab(u *User, id string) (Lab, error) {
 	URL := buildURL(fmt.Sprintf("/labs/%v?expand=true", id))
-	b, code, err := SendHTTPRequest("GET", URL, u.Token, nil)
+	b, r, err := SendHTTPRequest("GET", URL, u.Token, nil)
 	// fmt.Printf("%s", b)
 	if err != nil {
-		if code == 404 {
-			log.Fatalf("Failed to retrieve Lab with ID %s!", id)
+		if r.StatusCode == 404 {
+			log.Fatalf("Failed to retrieve Lab with ID %s!, HTTP Error '%d': resource not found!\n", id, r.StatusCode)
 		}
 	}
 	var result Lab
