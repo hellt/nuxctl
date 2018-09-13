@@ -12,6 +12,7 @@ import (
 var VERSION string
 
 var emptyTemplateID = "5980ee745a38da00012d158d"
+var nuxReason = "nuxctl"
 
 var user nuagex.User
 

@@ -31,6 +31,8 @@ var createLabCmd = &cobra.Command{
 func createLab(cmd *cobra.Command, args []string) {
 	lab.Conf(LabFPath)
 
+	lab.Reason = nuxReason // change reason field to nuxctl
+
 	j, err := json.Marshal(lab)
 	if err != nil {
 		log.Fatalf("%v", err)
