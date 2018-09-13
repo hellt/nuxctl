@@ -34,15 +34,15 @@ You no longer need to request a Lab prolongation, it is easily **redeployable**.
 ## Download
 The CLI utility is distributed in a binary format (arch: amd64) for the following platforms:
 
-* [linux](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/linux/nuxctl)
-* [os x](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/darwin/nuxctl)
-* [windows](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/windows/nuxctl.exe)
+* [linux](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/linux/nuxctl)
+* [os x](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/darwin/nuxctl)
+* [windows](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/windows/nuxctl.exe)
 
 You can download the utility and make it ready to use in one line:
 ```bash
-# example for os x and linux systems
+# example for os x
 # the path /usr/local/bin should be in your $PATH if you want the binary to be runnable from the arbitrary current working directory.
-cd /usr/local/bin && curl -O https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.1.0/darwin/nuxctl && chmod a+x nuxctl
+cd /usr/local/bin && curl -O https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/darwin/nuxctl && chmod a+x nuxctl
 ```
 
 ## Usage
@@ -55,8 +55,13 @@ cd /usr/local/bin && curl -O https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/
 Prior to jumping into each commands syntax and usage examples its important to mention that only an authenticated user can interact with NuageX API. This means that each command requires a proper authentication to happen.
 
 ### Authentication
-`nuxctl` commands expect to find NuageX users credentials stored in a YAML file aka _credentials file_:
+`nuxctl` can receive credentials in the following forms:
 
+1. Credentials are stored in a YAML file (aka _credentials file_)
+2. Credentials are exported as the environment variables `NUX_USERNAME` and `NUX_PASSWORD`.
+
+#### Credentials file
+Credentials file should have the following key-value pairs:
 ```yaml
 ---
 # example credentials file user_creds.yml
@@ -74,6 +79,9 @@ nuxctl create-lab -c my_creds.yml -l mylab.yml
 nuxctl create-lab -l mylab.yml
 ```
 
+#### Credentials via environment variables
+Credentials from env vars will be read in case of `-c` flag missing and no default credentials file present (user_creds.yml) in the directory where nuxctl binary is located. In that case `nuxctl` will attempt to get the values of `NUX_USERNAME` and `NUX_PASSWORD` env. vars.
+
 ### Lab definition file
 Another key concept used in various `nuxctl` commands is the _Lab definition/configuration file_. This file declares the NuageX Lab configuration expressed in YAML markup and is the source of information for the `create-lab` command.
 
@@ -81,7 +89,6 @@ Take a look at the following example:
 
 ```yml
 name: nuxctl-example
-reason: "Nux'em all"
 expires: "2018-08-28T17:13:11.278Z"
 template: "5980ee745a38da00012d158d"
 
@@ -140,7 +147,7 @@ Lets go over some notable blocks here:
 * `template`: ID of the _base template_. You can get the list of available templates and theirs ID by using `nuxctl list-templates` command.
 * `sshKeys`: put a name and the public key that you want to use with this lab. Multiple keys can be provided.
 
-> **IMPORTANT:** the public key should have been added to your NuageX profile before you use it in the lab definition file `nuxctl`. If you see that your lab is queued for creation by `nuxctl`, but nothing is seen in the web ui, then first check your key, make sure that it is pasted without errors or truncation.
+> **IMPORTANT:** If you see that your lab is queued for creation by `nuxctl`, but nothing is seen in the web ui, then first check your key, make sure that it is pasted without errors or truncation.
 
 #### Services
 In the Services block the port-forwarding rules are defined. These rules are configured in the jumpbox vm of your Lab.
@@ -173,7 +180,7 @@ Loading lab configuration from 'demo_lab.yml' file
 Lab ID 5b990011e8b2618598c92f8c has been successfully queued for creation! Request ID c0297bea-edf9-42e4-a303-9af563ce089f
 ```
 
-Note the request IDs reported in the last line of the output, if you see that Labs failed to create or did not appear at all, reach out to nuxctl maintainer providing these two identificators for troubleshooting.
+Mark the Lab and Request IDs reported in the last line of the output, if you see that Labs failed to create or did not appear at all, reach out to nuxctl maintainer providing these two identifiers for troubleshooting.
 
 ### dump-lab
 In case a user wants to save a running NuageX Lab (that has been created via Web UI) in a configuration file the `dump-lab` command can be used:
@@ -190,7 +197,7 @@ Flags:
 
 Again, credentials should be supplied along with the file name to save the Lab configuration. The Lab itself is referenced by its ID, which can be seen in the hostname portion of a lab:
 
-> ![pic a](https://gitlab.com/rdodin/pics/wikis/uploads/24527d2b40858051d82ebf1edc1d2e67/image.png)
+> ![pic 1](https://gitlab.com/rdodin/pics/wikis/uploads/24527d2b40858051d82ebf1edc1d2e67/image.png)
 
 For reference' sake lets dump the lab created previously in a file named `dump-example.yml`:
 
@@ -239,12 +246,7 @@ OMITTED FOR BREVITY
 ```
 
 ## Changelog
-### 0.1.0
-* added CLI framework to support multiple commands
-* added `create-lab`, `dump-lab`, `list-templates`, `version` commands
-
-### 0.0.1
-Initial version.
+Changelog is [here](CHANGELOG.md)
 
 ## Author
 Roman Dodin - roman.dodin@nokia.com

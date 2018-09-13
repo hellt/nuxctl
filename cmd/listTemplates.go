@@ -20,7 +20,7 @@ func init() {
 var listTemplatesCmd = &cobra.Command{
 	Use:   "list-templates",
 	Short: "Display NuageX Lab templates.",
-	Long:  `Outputs to console the list of availalbe NuageX Lab templates.`,
+	Long:  `Outputs to console the list of available NuageX Lab templates.`,
 	Run:   listTemplates,
 }
 
@@ -47,6 +47,7 @@ func printTemplates(t []*nuagex.Template) {
 	const format = "%v\t%v\n"
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
 	sort.Sort(byTemplateName(t))
+	fmt.Printf("\n")
 	fmt.Fprintf(tw, format, "ID", "Name")
 	fmt.Fprintf(tw, format, "------------------------", "------------------------")
 	for _, t := range t {
