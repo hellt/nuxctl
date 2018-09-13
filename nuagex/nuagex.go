@@ -32,7 +32,7 @@ func buildURL(path string) string {
 }
 
 // SendHTTPRequest : Request for a given method and url along with body parameters.
-func SendHTTPRequest(method, url, token string, body []byte) ([]byte, int, error) {
+func SendHTTPRequest(method, url, token string, body []byte) ([]byte, *http.Response, error) {
 	req, err := http.NewRequest(method, url, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
@@ -44,7 +44,7 @@ func SendHTTPRequest(method, url, token string, body []byte) ([]byte, int, error
 
 	response, err := client.Do(req)
 	if err != nil || response.StatusCode == 404 {
-		return nil, 404, errors.New("Resource not found")
+		return nil, response, errors.New("Resource not found")
 	}
 	defer response.Body.Close()
 
@@ -53,7 +53,7 @@ func SendHTTPRequest(method, url, token string, body []byte) ([]byte, int, error
 		log.Fatal(readErr)
 	}
 
-	return body, response.StatusCode, nil
+	return body, response, nil
 }
 
 // GetAllFlavors : Get all image flavors

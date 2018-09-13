@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -75,25 +76,25 @@ func (c *Lab) Conf(fn string) *Lab {
 }
 
 // CreateLab : Create a Lab in NuageX
-func CreateLab(u *User, reqb []byte) (LabResponse, error) {
+func CreateLab(u *User, reqb []byte) (LabResponse, *http.Response, error) {
 	URL := buildURL("/labs")
-	b, _, err := SendHTTPRequest("POST", URL, u.Token, reqb)
+	b, r, err := SendHTTPRequest("POST", URL, u.Token, reqb)
 	if err != nil {
-		return LabResponse{}, err
+		return LabResponse{}, r, err
 	}
 	var result LabResponse
 	json.Unmarshal(b, &result)
-	return result, nil
+	return result, r, nil
 }
 
 // DumpLab retrives Lab JSON object
 func DumpLab(u *User, id string) (Lab, error) {
 	URL := buildURL(fmt.Sprintf("/labs/%v?expand=true", id))
-	b, code, err := SendHTTPRequest("GET", URL, u.Token, nil)
+	b, r, err := SendHTTPRequest("GET", URL, u.Token, nil)
 	// fmt.Printf("%s", b)
 	if err != nil {
-		if code == 404 {
-			log.Fatalf("Failed to retrieve Lab with ID %s!", id)
+		if r.StatusCode == 404 {
+			log.Fatalf("Failed to retrieve Lab with ID %s!, HTTP Error '%d': resource not found!\n", id, r.StatusCode)
 		}
 	}
 	var result Lab
