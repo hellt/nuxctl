@@ -170,9 +170,10 @@ Loading user credentials from 'demo_user_creds.yml' file
 Logging 'hellt' user in...
 User 'hellt' logged in...
 Loading lab configuration from 'demo_lab.yml' file
-Sending request to create a lab...
-Lab has been successfully queued for creation!
+Lab ID 5b990011e8b2618598c92f8c has been successfully queued for creation! Request ID c0297bea-edf9-42e4-a303-9af563ce089f
 ```
+
+Note the request IDs reported in the last line of the output, if you see that Labs failed to create or did not appear at all, reach out to nuxctl maintainer providing these two identificators for troubleshooting.
 
 ### dump-lab
 In case a user wants to save a running NuageX Lab (that has been created via Web UI) in a configuration file the `dump-lab` command can be used:

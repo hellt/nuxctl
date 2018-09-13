@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -75,15 +76,15 @@ func (c *Lab) Conf(fn string) *Lab {
 }
 
 // CreateLab : Create a Lab in NuageX
-func CreateLab(u *User, reqb []byte) (LabResponse, error) {
+func CreateLab(u *User, reqb []byte) (LabResponse, *http.Response, error) {
 	URL := buildURL("/labs")
-	b, _, err := SendHTTPRequest("POST", URL, u.Token, reqb)
+	b, r, err := SendHTTPRequest("POST", URL, u.Token, reqb)
 	if err != nil {
-		return LabResponse{}, err
+		return LabResponse{}, r, err
 	}
 	var result LabResponse
 	json.Unmarshal(b, &result)
-	return result, nil
+	return result, r, nil
 }
 
 // DumpLab retrives Lab JSON object
