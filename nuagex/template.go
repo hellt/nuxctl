@@ -7,9 +7,9 @@ import (
 
 // Template represents NuageX Lab template
 type Template struct {
-	ID   string   `yaml:"name" json:"_id"`
-	Name string   `yaml:"name" json:"name"`
-	Tags []string `yaml:"tags" json:"tags"`
+	ID   string `yaml:"_id" json:"_id"`
+	Name string
+	Tags []string
 }
 
 // GetTemplates retrives Lab JSON object
@@ -20,7 +20,7 @@ func GetTemplates(u *User, id string) ([]*Template, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var result []*Template
-	json.Unmarshal(b, &result)
-	return result, nil
+	var t []*Template
+	json.Unmarshal(b, &t)
+	return t, nil
 }

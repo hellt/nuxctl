@@ -43,7 +43,7 @@ func dumpLab(cmd *cobra.Command, args []string) {
 
 	fmt.Println("Retrieving NuageX Lab configuration...")
 
-	l, err := nuagex.DumpLab(&user, labID)
+	l, _, err := nuagex.DumpLab(&user, labID)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
