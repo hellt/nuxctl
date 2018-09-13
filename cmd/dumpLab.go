@@ -52,6 +52,8 @@ func dumpLab(cmd *cobra.Command, args []string) {
 	// change the template ID from the actual template id to the empty template
 	// discussed in https://gitlab.com/partner-program/nuagex/nuxctl/issues/3
 	l.Template = emptyTemplateID
+	// scratch out the reason field to not appear in the YAML file
+	l.Reason = ""
 
 	ly, err := yaml.Marshal(&l)
 	if err != nil {

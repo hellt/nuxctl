@@ -15,7 +15,7 @@ import (
 // Lab defines a NuageX environment
 type Lab struct {
 	Name     string    `yaml:"name" json:"name"`
-	Reason   string    `yaml:"reason" json:"reason"`
+	Reason   string    `yaml:"reason,omitempty" json:"reason"`
 	Expires  time.Time `yaml:"expires" json:"expires"`
 	Template string    `yaml:"template" json:"template"`
 	SSHKeys  []struct {
