@@ -54,9 +54,9 @@ type Lab struct {
 // LabResponse : NuageX Lab response JSON object mapping
 type LabResponse struct {
 	ID       string `json:"_id"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	Status   string `json:"status"`
+	Name     string
+	Password string
+	Status   string
 }
 
 // Conf loads nuagex lab configuration from a YAML file
@@ -82,22 +82,29 @@ func CreateLab(u *User, reqb []byte) (LabResponse, *http.Response, error) {
 	if err != nil {
 		return LabResponse{}, r, err
 	}
-	var result LabResponse
-	json.Unmarshal(b, &result)
-	return result, r, nil
+	var lr LabResponse
+	json.Unmarshal(b, &lr)
+	if r.StatusCode != 200 {
+		var eresp ErrorResponse
+		json.Unmarshal(b, &eresp)
+		log.Fatalf("Failed to create lab. Reason: %s", eresp.Message)
+	}
+	return lr, r, nil
 }
 
 // DumpLab retrives Lab JSON object
-func DumpLab(u *User, id string) (Lab, error) {
+func DumpLab(u *User, id string) (Lab, *http.Response, error) {
 	URL := buildURL(fmt.Sprintf("/labs/%v?expand=true", id))
 	b, r, err := SendHTTPRequest("GET", URL, u.Token, nil)
-	// fmt.Printf("%s", b)
 	if err != nil {
-		if r.StatusCode == 404 {
-			log.Fatalf("Failed to retrieve Lab with ID %s!, HTTP Error '%d': resource not found!\n", id, r.StatusCode)
-		}
+		log.Fatal(err)
+	}
+	if r.StatusCode != 200 {
+		var eresp ErrorResponse
+		json.Unmarshal(b, &eresp)
+		log.Fatalf("Failed to dump the lab. Reason: %s", eresp.Message)
 	}
 	var result Lab
 	json.Unmarshal(b, &result)
-	return result, nil
+	return result, r, nil
 }

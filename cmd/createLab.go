@@ -39,5 +39,5 @@ func createLab(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Lab ID %s has been successfully queued for creation! Request ID %s.", lr.ID, r.Header.Get("x-request-id"))
+	fmt.Printf("Lab ID %s has been successfully queued for creation! Request ID %s.\n", lr.ID, r.Header.Get("x-request-id"))
 }

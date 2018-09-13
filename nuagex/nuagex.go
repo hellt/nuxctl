@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -15,6 +14,7 @@ import (
 const apiURL string = "https://experience.nuagenetworks.net/api"
 
 // FlavorResponse : Image Flavor response JSON object mapping
+// NOT IMPLEMENTED YET IN CLI
 type FlavorResponse struct {
 	ID                   string        `json:"_id"`
 	Name                 string        `json:"name"`
@@ -25,6 +25,11 @@ type FlavorResponse struct {
 	AllowedOrganizations []interface{} `json:"allowedOrganizations"`
 	Disk                 int           `json:"disk"`
 	Created              time.Time     `json:"created"`
+}
+
+// ErrorResponse handles NuageX API responce in case of a non 200 OK operation
+type ErrorResponse struct {
+	Message string
 }
 
 func buildURL(path string) string {
@@ -43,8 +48,8 @@ func SendHTTPRequest(method, url, token string, body []byte) ([]byte, *http.Resp
 	client := &http.Client{Transport: tr}
 
 	response, err := client.Do(req)
-	if err != nil || response.StatusCode == 404 {
-		return nil, response, errors.New("Resource not found")
+	if err != nil {
+		log.Fatal(err)
 	}
 	defer response.Body.Close()
 
