@@ -39,7 +39,6 @@ func (u *User) LoadCredentials(fn string) *User {
 
 	if _, err := os.Stat(fn); os.IsNotExist(err) {
 		fmt.Println("Looking for user credentials in the environment variables 'NUX_USERNAME', 'NUX_PASSWORD'...")
-		fmt.Printf("%s, %s\n", os.Getenv("NUX_USERNAME"), os.Getenv("NUX_PASSWORD"))
 		if os.Getenv("NUX_USERNAME") == "" || os.Getenv("NUX_PASSWORD") == "" {
 			log.Fatalf("Failed to find credentials file by the default path '%s' and in the environment variables 'NUX_USERNAME', 'NUX_PASSWORD'", fn)
 		}

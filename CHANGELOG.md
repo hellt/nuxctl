@@ -1,3 +1,7 @@
+## 0.2.1
+
+* fixed debug printout of env vars
+
 ## 0.2.0
 
 * added ability to pass credentials via env vars. Check [README.md](README.md)

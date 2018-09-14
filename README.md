@@ -34,15 +34,15 @@ You no longer need to request a Lab prolongation, it is easily **redeployable**.
 ## Download
 The CLI utility is distributed in a binary format (arch: amd64) for the following platforms:
 
-* [linux](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/linux/nuxctl)
-* [os x](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/darwin/nuxctl)
-* [windows](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/windows/nuxctl.exe)
+* [linux](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.1/linux/nuxctl)
+* [os x](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.1/darwin/nuxctl)
+* [windows](https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.1/windows/nuxctl.exe)
 
 You can download the utility and make it ready to use in one line:
 ```bash
 # example for os x
 # the path /usr/local/bin should be in your $PATH if you want the binary to be runnable from the arbitrary current working directory.
-cd /usr/local/bin && curl -O https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.0/darwin/nuxctl && chmod a+x nuxctl
+cd /usr/local/bin && curl -O https://s3.eu-west-2.amazonaws.com/nuxctl/binaries/0.2.1/darwin/nuxctl && chmod a+x nuxctl
 ```
 
 ## Usage
