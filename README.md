@@ -216,6 +216,23 @@ Note, that the lab configuration retrieved with the `dump-lab` command will have
 
 Another intervention this command makes is that the original _template ID_ that was used to build a lab will appear in the YAML file as the _Empty Template ID (5980ee745a38da00012d158d)_. This is a necessary change to make the dumped configuration be immediately reusable by the `create-lab` command.
 
+### dump-template
+`nuxctl` is capable of saving a NuageX Template configuration (in the same way as `dump-lab` saves the lab config) in a configuration file:
+
+```
+Usage:
+  nuxctl dump-template [flags]
+
+Flags:
+  -c, --credentials    Path to the user credentials file. (default "user_creds.yml")
+  -f, --file           Path to the local YAML file that will receive template configuration. (default "dumptemplate.yml")
+  -i, --template-id    Template ID.
+```
+
+Note, that the lab configuration retrieved with the `dump-lab` command will have the _private_ network commented out. This is done on purpose, to let you reuse the dumped configuration without manually commenting out this block.
+
+Another intervention this command makes is that the original _template ID_ that was used to build a lab will appear in the YAML file as the _Empty Template ID (5980ee745a38da00012d158d)_. This is a necessary change to make the dumped configuration be immediately reusable by the `create-lab` command.
+
 ### list-templates
 NuageX provides a long list of Lab Templates ranging from simple Nuage VNS/VCS installations to the complex partner integrations. Every NuageX Lab should be based on some Template.
 
