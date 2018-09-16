@@ -37,13 +37,13 @@ func listTemplates(cmd *cobra.Command, args []string) {
 	printTemplates(templates)
 }
 
-type byTemplateName []*nuagex.Template
+type byTemplateName []*nuagex.TemplateShort
 
 func (x byTemplateName) Len() int           { return len(x) }
 func (x byTemplateName) Less(i, j int) bool { return x[i].Name < x[j].Name }
 func (x byTemplateName) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
 
-func printTemplates(t []*nuagex.Template) {
+func printTemplates(t []*nuagex.TemplateShort) {
 	const format = "%v\t%v\n"
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
 	sort.Sort(byTemplateName(t))
