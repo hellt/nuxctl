@@ -36,7 +36,7 @@ var dumpTemplateCmd = &cobra.Command{
 }
 
 func dumpTemplate(cmd *cobra.Command, args []string) {
-	// loginUser(cmd, args) // commented for local testing
+	loginUser(cmd, args)
 
 	fmt.Println("Retrieving NuageX Template configuration...")
 

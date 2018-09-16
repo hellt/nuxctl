@@ -65,10 +65,11 @@ func CreateLab(u *User, reqb []byte) (LabResponse, *http.Response, error) {
 	return lr, r, nil
 }
 
-// DumpLab retrives Lab JSON object
-func DumpLab(u *User, id string) (Lab, *http.Response, error) {
+// GetLab retrieves Lab JSON object
+func GetLab(u *User, id string) (Lab, *http.Response, error) {
 	URL := buildURL(fmt.Sprintf("/labs/%v?expand=true", id))
 	b, r, err := SendHTTPRequest("GET", URL, u.Token, nil)
+
 	if err != nil {
 		log.Fatal(err)
 	}
