@@ -18,37 +18,10 @@ type Lab struct {
 	Reason   string    `yaml:"reason,omitempty" json:"reason"`
 	Expires  time.Time `yaml:"expires" json:"expires"`
 	Template string    `yaml:"template" json:"template"`
-	SSHKeys  []struct {
-		Name string `yaml:"name" json:"name"`
-		Key  string `yaml:"key" json:"key"`
-	} `yaml:"sshKeys" json:"sshKeys"`
-	Services []struct {
-		Name        string   `yaml:"name" json:"name"`
-		Type        string   `yaml:"type" json:"type"`
-		Port        int      `yaml:"port" json:"port"`
-		URLScheme   string   `yaml:"urlScheme,omitempty" json:"urlScheme,omitempty"`
-		Protocols   []string `yaml:"protocols" json:"protocols"`
-		Destination struct {
-			Port    int    `yaml:"port" json:"port"`
-			Address string `yaml:"address" json:"address"`
-		} `yaml:"destination" json:"destination"`
-	} `yaml:"services" json:"services"`
-	Networks []struct {
-		Name string      `yaml:"name" json:"name"`
-		Cidr string      `yaml:"cidr" json:"cidr"`
-		DNS  interface{} `yaml:"dns" json:"dns"`
-		Dhcp bool        `yaml:"dhcp" json:"dhcp"`
-	} `yaml:"networks" json:"networks"`
-	Servers []struct {
-		Name       string `yaml:"name" json:"name"`
-		Image      string `yaml:"image" json:"image"`
-		Flavor     string `yaml:"flavor" json:"flavor"`
-		Interfaces []struct {
-			Index   int    `yaml:"index" json:"index"`
-			Network string `yaml:"network" json:"network"`
-			Address string `yaml:"address" json:"address"`
-		} `yaml:"interfaces" json:"interfaces"`
-	} `yaml:"servers" json:"servers"`
+	SSHKeys  []SSHKey  `yaml:"sshKeys" json:"sshKeys"`
+	Services []Service `yaml:"services" json:"services"`
+	Networks []Network `yaml:"networks" json:"networks"`
+	Servers  []Server  `yaml:"servers" json:"servers"`
 }
 
 // LabResponse : NuageX Lab response JSON object mapping
