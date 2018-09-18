@@ -1,3 +1,8 @@
+## 0.3.0
+
+* `dump-lab` now comments out the entities that are found in the template referenced in this lab. This makes it possible to dump a lab and immediately use the produced file in the `create-lab` command.
+* added command `dump-template`. This commands dumps the tempalate definiton to a YAML file.
+
 ## 0.2.1
 
 * fixed debug printout of env vars
