@@ -7,7 +7,7 @@ import (
 	"log"
 	"nuxctl/nuagex"
 	"os"
-	"strings"
+	"regexp"
 
 	"gopkg.in/yaml.v2"
 
@@ -43,17 +43,20 @@ func dumpLab(cmd *cobra.Command, args []string) {
 
 	fmt.Println("Retrieving NuageX Lab configuration...")
 
-	l, _, err := nuagex.DumpLab(&user, labID)
+	l, _, err := nuagex.GetLab(&user, labID)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
-	fmt.Println("Parsing Lab configuration...")
 
-	// change the template ID from the actual template id to the empty template
-	// discussed in https://gitlab.com/partner-program/nuagex/nuxctl/issues/3
-	l.Template = emptyTemplateID
 	// scratch out the reason field to not appear in the YAML file
 	l.Reason = ""
+
+	// get Template from dumped lab to later exclude template entities
+	// from dumped lab file
+	t, _, err := nuagex.GetTemplate(&user, l.Template)
+	if err != nil {
+		log.Fatalf("%v", err)
+	}
 
 	ly, err := yaml.Marshal(&l)
 	if err != nil {
@@ -65,13 +68,12 @@ func dumpLab(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
+	// comment Template entities from the dumped lab file
+	commentTemplateEntities(outLabFPath, t)
 	fmt.Printf("Lab configuration has been successfully written to '%s' file!\n", outLabFPath)
-
-	// remove private network portion from the dumped lab file
-	commentPrivateNetwork(outLabFPath)
 }
 
-func commentPrivateNetwork(fp string) {
+func commentTemplateEntities(fp string, t *nuagex.Template) {
 	tmpPath := "tmp_dumplab.yml"
 	tmpFile, err := os.Create(tmpPath)
 	if err != nil {
@@ -87,30 +89,37 @@ func commentPrivateNetwork(fp string) {
 
 	scanner := bufio.NewScanner(file)
 
-	inNetsSection := false    // if inside `networks:` section
-	inNetPrivSection := false // if inside private network section
+	topSecFound := false // if one of the top section `services`, `servers`, or `networks:` has been found
+	doComment := false
+	ssnr := regexp.MustCompile(`^- name: (\S+)$`) // regexp to match a sub section name
+	var sn string                                 // top section name
+	var ssn string                                // sub section name
 	for scanner.Scan() {
 		s := scanner.Text()
-		if s == "networks:" {
-			inNetsSection = true
+
+		if s == "networks:" || s == "services:" || s == "servers:" {
+			topSecFound = true
+			sn = s[:len(s)-1]
+			doComment = false // do not ever comment the top section name
+			// fmt.Printf("in section %s\n", sn)
 		}
 
-		if inNetsSection && (s != "networks:") && !(strings.HasPrefix(s, "-") || strings.HasPrefix(s, "  ")) {
-			inNetsSection = false
-		}
-
-		if inNetsSection && s == "- name: private" {
-			inNetPrivSection = true
-			tmpFile.WriteString("# nuxctl: private network has been commented out, since it should not be a part of the lab configuration file used in `create-lab` command.\n# nuxctl: network `private` is always implicitly created by NuageX for every lab.\n")
-		}
-
-		if inNetPrivSection {
-			if strings.HasPrefix(s, "  ") || s == "- name: private" {
-				s = fmt.Sprintf("# %s", s) // add comment symbol for private network children
+		// ssm - subsection match
+		ssm := ssnr.FindStringSubmatch(s)
+		if topSecFound && ssm != nil && len(ssm) == 2 {
+			ssn = ssm[1]
+			// fmt.Printf("subsection %s\n", ssn)
+			// if a pair section+subsection is found in template, we need to comment it
+			if isInT(sn, ssn, t) {
+				doComment = true
 			} else {
-				inNetPrivSection = false
+				doComment = false
 			}
+			// fmt.Printf("is section %s and subsec %s in template?: %v\n", sn, ssn, is)
+		}
 
+		if doComment {
+			s = fmt.Sprintf("# %s", s) // add comment symbol
 		}
 
 		tmpFile.WriteString(fmt.Sprintf("%s\n", s))
@@ -121,4 +130,35 @@ func commentPrivateNetwork(fp string) {
 		log.Fatal(err)
 	}
 
+}
+
+// isInT checks if a particular section+subsection pair exists in the Template `t`
+func isInT(sn, ssn string, t *nuagex.Template) bool {
+	var sl []string
+	switch sn {
+	case "services":
+		{
+			for _, v := range t.Services {
+				sl = append(sl, v.Name)
+			}
+		}
+	case "networks":
+		{
+			for _, v := range t.Networks {
+				sl = append(sl, v.Name)
+			}
+		}
+	case "servers":
+		{
+			for _, v := range t.Servers {
+				sl = append(sl, v.Name)
+			}
+		}
+	}
+	for _, v := range sl {
+		if v == ssn {
+			return true
+		}
+	}
+	return false
 }

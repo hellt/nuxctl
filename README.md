@@ -207,14 +207,26 @@ Loading user credentials from 'demo_user_creds.yml' file
 Logging 'hellt' user in...
 User 'hellt' logged in...
 Retrieving NuageX Lab configuration...
-Parsing Lab configuration...
 Writing Lab configuration to 'dump-example.yml' file...
 Lab configuration has been successfully written to 'dump-example.yml' file!
 ```
 
-Note, that the lab configuration retrieved with the `dump-lab` command will have the _private_ network commented out. This is done on purpose, to let you reuse the dumped configuration without manually commenting out this block.
+Note, that the lab configuration retrieved with the `dump-lab` command will have the certain services, networks and servers elements commented out. This means that these elements came from the template used in that particular lab. By having these elements present in the dumped lab configuration file makes it easier to see the whole lab configuration, while at the same time making it suitable for a respin with the `create-lab` command. 
 
-Another intervention this command makes is that the original _template ID_ that was used to build a lab will appear in the YAML file as the _Empty Template ID (5980ee745a38da00012d158d)_. This is a necessary change to make the dumped configuration be immediately reusable by the `create-lab` command.
+### dump-template
+`nuxctl` is capable of saving a NuageX Template configuration (in the same way as `dump-lab` saves the lab config) in a configuration file:
+
+```
+Usage:
+  nuxctl dump-template [flags]
+
+Flags:
+  -c, --credentials    Path to the user credentials file. (default "user_creds.yml")
+  -f, --file           Path to the local YAML file that will receive template configuration. (default "dumptemplate.yml")
+  -i, --template-id    Template ID.
+```
+
+Note, that the dumped template can not be used as-is with `create-lab` command. Every template resource (service, network, server) should be excluded (or commented) in a file that reference the template that has these resources defined.
 
 ### list-templates
 NuageX provides a long list of Lab Templates ranging from simple Nuage VNS/VCS installations to the complex partner integrations. Every NuageX Lab should be based on some Template.
