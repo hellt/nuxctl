@@ -46,6 +46,11 @@ func GetTemplate(u *User, id string) (*Template, *http.Response, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if r.StatusCode != 200 {
+		var eresp ErrorResponse
+		json.Unmarshal(b, &eresp)
+		log.Fatalf("Failed to dump the lab. Reason: %s", eresp.Message)
+	}
 	var t *Template
 	json.Unmarshal(b, &t)
 	return t, r, nil
