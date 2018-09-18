@@ -226,9 +226,7 @@ Flags:
   -i, --template-id    Template ID.
 ```
 
-Note, that the lab configuration retrieved with the `dump-lab` command will have the _private_ network commented out. This is done on purpose, to let you reuse the dumped configuration without manually commenting out this block.
-
-Another intervention this command makes is that the original _template ID_ that was used to build a lab will appear in the YAML file as the _Empty Template ID (5980ee745a38da00012d158d)_. This is a necessary change to make the dumped configuration be immediately reusable by the `create-lab` command.
+Note, that the dumped template can not be used as-is with `create-lab` command. Every template resource (service, network, server) should be excluded (or commented) in a file that reference the template that has these resources defined.
 
 ### list-templates
 NuageX provides a long list of Lab Templates ranging from simple Nuage VNS/VCS installations to the complex partner integrations. Every NuageX Lab should be based on some Template.
