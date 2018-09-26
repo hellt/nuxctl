@@ -2,7 +2,6 @@ package nuagex
 
 import (
 	"bytes"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -42,10 +41,7 @@ func SendHTTPRequest(method, url, token string, body []byte) ([]byte, *http.Resp
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
 
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	client := &http.Client{Transport: tr}
+	client := &http.Client{}
 
 	response, err := client.Do(req)
 	if err != nil {
