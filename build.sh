@@ -1,3 +1,5 @@
+set -ev
+
 version=$1
 target_arch=amd64
 

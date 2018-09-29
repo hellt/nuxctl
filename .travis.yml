@@ -3,5 +3,9 @@ language: go
 go:
   - "1.11"
 
+branches:
+  only:
+  - /add-travis-ci/
+
 script:
   - bash build.sh v-test
