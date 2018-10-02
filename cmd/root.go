@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"nuxctl/nuagex"
 	"os"
+
+	"github.com/nuagenetworks/nuxctl/nuagex"
 
 	"github.com/spf13/cobra"
 )
