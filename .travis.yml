@@ -3,9 +3,19 @@ language: go
 go:
   - master
 
-branches:
-  only:
-  - /add-travis-ci/
+before_deploy:
+  - "./build.sh $TRAVIS_BRANCH"
+deploy:
+  provider: releases
+  api_key: $GH_API_TOKEN
+  file: build/$TRAVIS_BRANCH/*
+  skip_cleanup: true
+  on:
+    tags: true
 
-script:
-  - bash build.sh v-test
+# branches:
+#   only:
+#   - /add-travis-ci/
+
+# script:
+#   - bash build.sh v-test
