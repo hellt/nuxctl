@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"nuxctl/nuagex"
+
+	"github.com/nuagenetworks/nuxctl/nuagex"
 
 	"github.com/spf13/cobra"
 )

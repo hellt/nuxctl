@@ -3,10 +3,11 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"nuxctl/nuagex"
 	"os"
 	"sort"
 	"text/tabwriter"
+
+	"github.com/nuagenetworks/nuxctl/nuagex"
 
 	"github.com/spf13/cobra"
 )

@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"nuxctl/nuagex"
 	"os"
 	"regexp"
+
+	"github.com/nuagenetworks/nuxctl/nuagex"
 
 	"gopkg.in/yaml.v2"
 

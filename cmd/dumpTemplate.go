@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"nuxctl/nuagex"
+
+	"github.com/nuagenetworks/nuxctl/nuagex"
 
 	"gopkg.in/yaml.v2"
 
