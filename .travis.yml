@@ -3,10 +3,6 @@ language: go
 go:
   - master
 
-# skip test phase since no tests are present
-install: true
-script: true
-
 before_deploy:
   - go get github.com/inconshreveable/mousetrap
   - "./build.sh $TRAVIS_BRANCH"
