@@ -3,10 +3,8 @@ language: go
 go:
   - master
 
-install:
-  - go get github.com/inconshreveable/mousetrap
-
 before_deploy:
+  - go get github.com/inconshreveable/mousetrap
   - "./build.sh $TRAVIS_BRANCH"
 
 deploy:
