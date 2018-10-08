@@ -19,3 +19,8 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+
+# safelist
+branches:
+  only:
+  - master
