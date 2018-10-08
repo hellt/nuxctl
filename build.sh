@@ -2,6 +2,7 @@
 
 version=$1
 
+echo "Creating build directory: $(pwd)/build/${version} ..."
 mkdir -p build/$version
 
 platforms=("windows/amd64" "linux/amd64" "darwin/amd64")

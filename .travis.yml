@@ -10,6 +10,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key: $GH_API_TOKEN
+  file_glob: true
   file: build/$TRAVIS_BRANCH/*
   skip_cleanup: true
   on:
