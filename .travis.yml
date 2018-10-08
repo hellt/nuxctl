@@ -3,8 +3,12 @@ language: go
 go:
   - master
 
+install:
+  - go get github.com/inconshreveable/mousetrap
+
 before_deploy:
   - "./build.sh $TRAVIS_BRANCH"
+
 deploy:
   provider: releases
   api_key: $GH_API_TOKEN
